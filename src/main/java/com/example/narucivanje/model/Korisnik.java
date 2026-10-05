@@ -17,10 +17,7 @@ import jakarta.persistence.Id;
  * @author necao
  */
 @Entity
-public class Korisnik {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Korisnik extends DomainEntity{
     @Column(nullable = false)
     private String ime;
     @Column(nullable = false)
@@ -45,15 +42,6 @@ public class Korisnik {
         this.telefon = telefon;
         this.uloga = uloga;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getIme() {
         return ime;
     }

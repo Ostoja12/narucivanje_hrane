@@ -24,10 +24,7 @@ import java.util.List;
  * @author necao
  */
 @Entity
-public class Porudzbina {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Porudzbina extends DomainEntity{
     @Column(nullable = false)
     private LocalDateTime datumVreme;
     @Column(nullable = false)
@@ -54,14 +51,6 @@ public class Porudzbina {
         this.ukupnaCena = ukupnaCena;
         this.korisnik = korisnik;
         this.restoran = restoran;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public LocalDateTime getDatumVreme() {

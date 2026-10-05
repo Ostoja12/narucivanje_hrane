@@ -15,25 +15,13 @@ import jakarta.persistence.Id;
  * @author necao
  */
 @Entity
-public class Kategorija {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Kategorija extends DomainEntity{
+    
     @Column(nullable = false, unique = true)
     private String naziv;
-
-    public Long getId() {
-        return id;
-    }
-
     public String getNaziv() {
         return naziv;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public void setNaziv(String naziv) {
         this.naziv = naziv;
     }

@@ -17,10 +17,8 @@ import java.math.BigDecimal;
  * @author necao
  */
 @Entity
-public class StavkaPorudzbine {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class StavkaPorudzbine extends DomainEntity{
+
     @Column(nullable = false)
     private int kolicina;
     @Column(nullable = false, precision = 10, scale = 2)
@@ -40,13 +38,6 @@ public class StavkaPorudzbine {
         this.jelo = jelo;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public int getKolicina() {
         return kolicina;

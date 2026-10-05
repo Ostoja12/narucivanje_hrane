@@ -15,10 +15,7 @@ import jakarta.persistence.Id;
  * @author necao
  */
 @Entity
-public class Restoran {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Restoran extends DomainEntity{
     @Column(nullable = false)
     private String naziv;
     @Column(nullable = false)
@@ -41,9 +38,7 @@ public class Restoran {
         return adresa;
     }
 
-    public Long getId() {
-        return id;
-    }
+
 
     public String getNaziv() {
         return naziv;
@@ -63,9 +58,6 @@ public class Restoran {
         this.adresa = adresa;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
    
 

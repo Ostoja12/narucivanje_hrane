@@ -17,10 +17,8 @@ import java.math.BigDecimal;
  * @author necao
  */
 @Entity
-public class Jelo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Jelo extends DomainEntity{
+   
     @Column(nullable = false)
     private String naziv;
     private String opis;
@@ -32,9 +30,7 @@ public class Jelo {
     @ManyToOne(optional = false)
     private Kategorija kategorija;
 
-    public Jelo() {
-    }
-
+   
     public Jelo(String naziv, String opis, boolean dostupnost, BigDecimal cena, Restoran restoran, Kategorija kategorija) {
         this.naziv = naziv;
         this.opis = opis;
@@ -56,9 +52,6 @@ public class Jelo {
     
     
 
-    public Long getId() {
-        return id;
-    }
 
     public Kategorija getKategorija() {
         return kategorija;
@@ -86,9 +79,7 @@ public class Jelo {
         this.dostupnost = dostupnost;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    
 
     public void setKategorija(Kategorija kategorija) {
         this.kategorija = kategorija;
