@@ -11,8 +11,10 @@ import com.example.narucivanje.repository.JeloRepository;
 import com.example.narucivanje.repository.KategorijaRepository;
 import com.example.narucivanje.repository.RestoranRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import jdk.javadoc.doclet.Reporter;
+import mapper.JeloMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 /**
@@ -24,11 +26,13 @@ public class JeloService {
     private final JeloRepository repo;
     private final RestoranRepository repoRestoran;
     private final KategorijaRepository repoKategorija;
+    private final JeloMapper jeloMapper;
     
-    public JeloService(JeloRepository repo, RestoranRepository repoRestoran, KategorijaRepository repoKategorija) {
+    public JeloService(JeloRepository repo, RestoranRepository repoRestoran, KategorijaRepository repoKategorija, JeloMapper jeloMapper) {
         this.repo = repo;
         this.repoRestoran = repoRestoran;
         this.repoKategorija = repoKategorija;
+        this.jeloMapper = jeloMapper;
     }
 //      List<Jelo> findByRestoranId(Long restoranId);
 //    List<Jelo> findByRestoranIdAndDostupnostTrue(Long restoranId);
@@ -40,39 +44,65 @@ public class JeloService {
     @Transactional
     public JeloDto kreirajJelo(JeloDto dto)
     {
-        Restoran restoran = repoRestoran.findById(dto.getRestoranId()).orElseThrow(() -> new EntityNotFoundException("Restoran sa Id: " + dto.getRestoranId() + " nije pronadjen!"));
-        Kategorija kategorija = repoKategorija.findById(dto.getKategorijaId()).orElseThrow(() -> new EntityNotFoundException("Kategorija sa id: " + dto.getKategorijaId() + "nije pronadjena!"));
-        
-        if(repo.existsByNazivAndRestoranId(dto.getNaziv(), dto.getRestoranId()))
+        Restoran restoran = repoRestoran.findById(dto.getId()).orElseThrow(() -> new EntityNotFoundException("Restoran sa Id: " + dto.getRestoranId() + " nije pronadjen!"));
+        Kategorija kategorija = repoKategorija.findById(dto.getId()).orElseThrow(() -> new EntityNotFoundException("Kategorija sa id + " + dto.getKategorijaId() + "nije pronadjena"));
+        if(repo.existsByNazivAndRestoranId(dto.getNaziv(), dto.getId()))
         {
-            throw new IllegalArgumentException("Jelo sa nazivom '" + dto.getNaziv() +"' vec postoji!");
+            throw new IllegalArgumentException("Jelo sa nazivom '" + dto.getNaziv()+ "' vec postoji u ovom restoranu");
         }
-        //ovde dto mapiraj u entity i samo lagani save
-        
+        Jelo jelo = jeloMapper.toEntity(dto);
+        jelo.setKategorija(kategorija);
+        jelo.setRestoran(restoran);
+        Jelo sacuvanoJelo = repo.save(jelo);
+        return jeloMapper.toDto(sacuvanoJelo);
     }
-//    public Jelo findById(Long jeloId)
-//    {
-//        return repo.findById(jeloId).orElseThrow(() -> new EntityNotFoundException("Nema jela sa id: " + jeloId));
-//    }
-//    public List<Jelo> findByRestoranId(Long restoranId)
-//    {
-//        if(!repoRestoran.existsById(restoranId))
+    @Transactional
+    public void obrisiJelo(Long jeloId)
+    {
+        if(!repo.existsById(jeloId))
+        {
+            throw new IllegalArgumentException("jelo sa id: '" + jeloId + "' ne postoji");
+        }
+        repo.deleteById(jeloId);
+    }
+    @Transactional
+    public JeloDto izmeniJelo(Long jeloId, JeloDto dto)
+    {
+        Jelo postojeceJelo = repo.findById(jeloId).orElseThrow(() -> new EntityNotFoundException("Jelo ne postoji!"));
+        Restoran restoran = repoRestoran.findById(dto.getRestoranId()).orElseThrow(() -> new EntityNotFoundException("Restoran ne postoji!"));
+        Kategorija kategorija = repoKategorija.findById(dto.getKategorijaId()).orElseThrow(() -> new EntityNotFoundException("kategorija ne postoji!"));
+        
+        postojeceJelo.setNaziv(dto.getNaziv());
+        postojeceJelo.setCena(dto.getCena());
+        postojeceJelo.setDostupnost(dto.isDostupnost());
+        postojeceJelo.setOpis(dto.getOpis());
+        postojeceJelo.setRestoran(restoran);
+        postojeceJelo.setKategorija(kategorija);
+        
+        Jelo sacuvanoJelo = repo.save(postojeceJelo);
+        return jeloMapper.toDto(sacuvanoJelo);
+    }
+    
+    public List<JeloDto> findByRestoranId(Long restoranId)
+    {
+        if(!repoRestoran.existsById(restoranId))
+        {
+            throw new EntityNotFoundException("Restoran sa id-em: " + restoranId + " ne postoji");
+        }
+        
+        List<Jelo> jela = repo.findByRestoranId(restoranId);
+        List<JeloDto> jelaDto = new ArrayList<>();
+//        for(Jelo j: jela)
 //        {
-//            throw new EntityNotFoundException("Restoran sa id-em: " + restoranId + " ne postoji");
+//            jelaDto.add(jeloMapper.toDto(j));
 //        }
-//        return repo.findByRestoranId(restoranId);
-//    }
-////    public List<Jelo> findByNazivContainingIgnoreCase(String naziv)
-////    {
-////        return repo.findByNazivContainingIgnoreCase(naziv);
-////    }
-//    public List<Jelo> findByRestoranIdAndDostupnostTrue(Long restoranId)
-//    {
-//        if(!repoRestoran.existsById(restoranId))
-//        {
-//           throw new EntityNotFoundException("Restoran sa id-em: " + restoranId + " ne postoji");
-//        }
-//        return repo.findByRestoranIdAndDostupnostTrue(restoranId);
-//    }
+//        return jelaDto;
+        return repo.findByRestoranId(restoranId).stream().map(jeloMapper::toDto).toList();
+    }
+    public List<Jelo> findByNazivContainingIgnoreCase(String naziv)
+    {
+        return repo.findByNazivContainingIgnoreCase(naziv);
+    }
+
     
 }

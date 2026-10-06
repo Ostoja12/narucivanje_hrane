@@ -30,6 +30,8 @@ public class Jelo extends DomainEntity{
     @ManyToOne(optional = false)
     private Kategorija kategorija;
 
+    public Jelo() {
+    }
    
     public Jelo(String naziv, String opis, boolean dostupnost, BigDecimal cena, Restoran restoran, Kategorija kategorija) {
         this.naziv = naziv;

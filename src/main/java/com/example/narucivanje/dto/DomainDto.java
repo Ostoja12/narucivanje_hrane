@@ -4,10 +4,18 @@
  */
 package com.example.narucivanje.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+
 /**
  *
  * @author necao
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class DomainDto {
-    
+    private Long id; 
 }

@@ -7,6 +7,7 @@ package com.example.narucivanje.dto;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -15,19 +16,32 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class JeloDto {
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+public class JeloDto extends DomainDto{
+
     private String naziv;
     private String opis;
     private BigDecimal cena;
     private boolean dostupnost;
     private String slikaUrl;
-
-    // Umesto celih objekata Restoran i Kategorija, nosimo samo ID i Naziv
+    
+    
     private Long restoranId;
     private String restoranNaziv;
     
     private Long kategorijaId;
     private String kategorijaNaziv;
+    public JeloDto(String naziv, String opis, BigDecimal cena, boolean dostupnost, String slikaUrl, Long restoranId, String restoranNaziv, Long kategorijaId, String kategorijaNaziv, Long id) {
+        super(id);
+        this.naziv = naziv;
+        this.opis = opis;
+        this.cena = cena;
+        this.dostupnost = dostupnost;
+        this.slikaUrl = slikaUrl;
+        this.restoranId = restoranId;
+        this.restoranNaziv = restoranNaziv;
+        this.kategorijaId = kategorijaId;
+        this.kategorijaNaziv = kategorijaNaziv;
+    }
+    
 }
