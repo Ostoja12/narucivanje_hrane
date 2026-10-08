@@ -11,10 +11,13 @@ import com.example.narucivanje.repository.JeloRepository;
 import com.example.narucivanje.repository.KategorijaRepository;
 import com.example.narucivanje.repository.RestoranRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import jdk.javadoc.doclet.Reporter;
-import mapper.JeloMapper;
+import com.example.narucivanje.mapper.JeloMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 /**
@@ -34,13 +37,7 @@ public class JeloService {
         this.repoKategorija = repoKategorija;
         this.jeloMapper = jeloMapper;
     }
-//      List<Jelo> findByRestoranId(Long restoranId);
-//    List<Jelo> findByRestoranIdAndDostupnostTrue(Long restoranId);
-//    List<Jelo> findByKategorijaId(Long kategorijaId);
-//    List<Jelo> findByNazivContainingIgnoreCase(String naziv);
-//    List<Jelo> findByCenaLessThanEqual(BigDecimal cena);
-//    List<Jelo> findByRestoranIdAndKategorijaId(Long restoranId, Long kategorijaId);
-//    List<Jelo> findByRestoranIdAndKategorijaIdAndDostupnostTrue(Long restoranId, Long kategorijaId);
+
     @Transactional
     public JeloDto kreirajJelo(JeloDto dto)
     {
@@ -99,10 +96,17 @@ public class JeloService {
 //        return jelaDto;
         return repo.findByRestoranId(restoranId).stream().map(jeloMapper::toDto).toList();
     }
-    public List<Jelo> findByNazivContainingIgnoreCase(String naziv)
+    public Page<JeloDto> pretraziJela(Long restoranId,
+        Long kategorijaId,
+        BigDecimal maxCena,
+        String naziv,
+        Pageable pageable)
     {
-        return repo.findByNazivContainingIgnoreCase(naziv);
+       return repo.pretraziJela(restoranId, kategorijaId, maxCena, naziv, pageable).map(jeloMapper::toDto);
     }
-
-    
+    public JeloDto getById(Long idJelo)
+    {
+        Jelo jelo = repo.findById(idJelo).orElseThrow(() -> new EntityNotFoundException("Jelo sa id-em: " + idJelo + " ne postoji"));
+        return jeloMapper.toDto(jelo);
+    }
 }

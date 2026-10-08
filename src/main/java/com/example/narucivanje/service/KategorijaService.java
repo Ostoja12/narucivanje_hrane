@@ -4,11 +4,14 @@
  */
 package com.example.narucivanje.service;
 
+import com.example.narucivanje.dto.KategorijaDto;
 import com.example.narucivanje.model.Kategorija;
 import com.example.narucivanje.repository.KategorijaRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import com.example.narucivanje.mapper.KategorijaMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,48 +19,53 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author necao
  */
+@RequiredArgsConstructor
 @Service
 public class KategorijaService {
     private final KategorijaRepository repo;
-
-    public KategorijaService(KategorijaRepository repo) {
-        this.repo = repo;
-    }
-    
+    private final KategorijaMapper kategorijaMapper;
+   
+  
     @Transactional(readOnly = true)
-    public List<Kategorija> findAll()
+    public List<KategorijaDto> findAll()
     {
-        return repo.findAll();
+        List<Kategorija> entitetiIzBaze = repo.findAll();
+        return entitetiIzBaze.stream().map(kategorijaMapper::toDto).toList();
+    }
+    @Transactional(readOnly = true)
+    public KategorijaDto findById(Long id)
+    {
+        Kategorija entity =  repo.findById(id).orElseThrow(() -> new EntityNotFoundException("Nema kategorije sa id" + id));
+        return kategorijaMapper.toDto(entity);
     }
     @Transactional
-    public Kategorija findById(Long id)
+    public KategorijaDto kreiraj(KategorijaDto kategorijaDto)
     {
-        return repo.findById(id).orElseThrow(() -> new EntityNotFoundException("Nema kategorije sa id" + id));
-    }
-    @Transactional
-    public Kategorija kreiraj(Kategorija kategorija)
-    {
-        if(repo.existsByNaziv(kategorija.getNaziv()))
+        if(repo.existsByNaziv(kategorijaDto.getNaziv()))
         {
-            throw new IllegalArgumentException("kategorija sa nazivom: " + kategorija.getNaziv() + " vec postoji!");
+            throw new IllegalArgumentException("kategorija sa nazivom: " + kategorijaDto.getNaziv() + " vec postoji!");
         }
-        return repo.save(kategorija);
+        Kategorija entity = kategorijaMapper.toEntity(kategorijaDto);
+        Kategorija sacuvana = repo.save(entity);
+        return kategorijaMapper.toDto(sacuvana);
+        
     }
     @Transactional
-    public Kategorija izmeni(Long id, Kategorija nova)
+    public KategorijaDto izmeni(Long id, KategorijaDto nova)
     {
-        Kategorija stara = findById(id);
-        if(!stara.getNaziv().equals(nova.getNaziv()) && repo.existsByNaziv(nova.getNaziv()))
+        Kategorija stara = repo.findById(id).orElseThrow(() -> new EntityNotFoundException("Kategorija sa id: " + id + " ne postoji"));
+        if(!stara.getNaziv().equalsIgnoreCase(nova.getNaziv()) && repo.existsByNaziv(nova.getNaziv()))
         {
             throw new IllegalArgumentException("kategorija sa nazivom :" + nova.getNaziv() + " vec postoji");
         }
         stara.setNaziv(nova.getNaziv());
-        return repo.save(stara);
+        Kategorija izmenjena = repo.save(stara);
+        return kategorijaMapper.toDto(izmenjena);
     }
     @Transactional
     public void obrisi(Long id)
     {
-        Kategorija postojeca = findById(id);
+        Kategorija postojeca = repo.findById(id).orElseThrow(() -> new EntityNotFoundException("Kategorija sa id: " + id + " ne postoji"));
         repo.delete(postojeca);
     }
     

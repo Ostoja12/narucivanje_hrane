@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-package mapper;
+package com.example.narucivanje.mapper;
 
 import com.example.narucivanje.dto.DomainDto;
 import com.example.narucivanje.model.DomainEntity;
