@@ -1,5 +1,6 @@
 package com.example.narucivanje.repository;
 import com.example.narucivanje.model.Restoran;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /*
@@ -14,4 +15,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RestoranRepository extends JpaRepository<Restoran, Long>{
     boolean existsByNaziv(String naziv);
     boolean existsById(Long restoranId);
+    List<Restoran> findByNazivContainingIgnoreCase(String naziv);
 }

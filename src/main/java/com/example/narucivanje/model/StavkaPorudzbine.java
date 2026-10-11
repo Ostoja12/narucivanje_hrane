@@ -11,12 +11,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author necao
  */
+
 @Entity
+@Data
+@NoArgsConstructor
+
 public class StavkaPorudzbine extends DomainEntity{
 
     @Column(nullable = false)
@@ -28,8 +35,6 @@ public class StavkaPorudzbine extends DomainEntity{
     @ManyToOne(optional = false)
     private Porudzbina porudzbina;
 
-    public StavkaPorudzbine() {
-    }
 
     public StavkaPorudzbine( int kolicina, BigDecimal cena, Jelo jelo) {
      
@@ -37,30 +42,4 @@ public class StavkaPorudzbine extends DomainEntity{
         this.cena = cena;
         this.jelo = jelo;
     }
-
-
-    public int getKolicina() {
-        return kolicina;
-    }
-
-    public void setKolicina(int kolicina) {
-        this.kolicina = kolicina;
-    }
-
-    public BigDecimal getCena() {
-        return cena;
-    }
-
-    public void setCena(BigDecimal cena) {
-        this.cena = cena;
-    }
-
-    public Jelo getJelo() {
-        return jelo;
-    }
-
-    public void setJelo(Jelo jelo) {
-        this.jelo = jelo;
-    }
-    
 }

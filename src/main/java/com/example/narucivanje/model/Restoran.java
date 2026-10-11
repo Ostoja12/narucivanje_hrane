@@ -9,12 +9,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author necao
  */
 @Entity
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Restoran extends DomainEntity{
     @Column(nullable = false)
     private String naziv;
@@ -24,55 +30,12 @@ public class Restoran extends DomainEntity{
     private String telefon;
     private String radnoVreme;
 
-    public Restoran() {
-    }
-
+    
     public Restoran(String naziv, String adresa, String telefon, String radnoVreme) {
         this.naziv = naziv;
         this.adresa = adresa;
         this.telefon = telefon;
         this.radnoVreme = radnoVreme;
-    }
-
-    public String getAdresa() {
-        return adresa;
-    }
-
-
-
-    public String getNaziv() {
-        return naziv;
-    }
-
-    public String getRadnoVreme() {
-        return radnoVreme;
-    }
-
-    
-
-    public String getTelefon() {
-        return telefon;
-    }
-
-    public void setAdresa(String adresa) {
-        this.adresa = adresa;
-    }
-
-
-   
-
-    public void setNaziv(String naziv) {
-        this.naziv = naziv;
-    }
-
-    public void setRadnoVreme(String radnoVreme) {
-        this.radnoVreme = radnoVreme;
-    }
-
-    
-
-    public void setTelefon(String telefon) {
-        this.telefon = telefon;
     }
     
     

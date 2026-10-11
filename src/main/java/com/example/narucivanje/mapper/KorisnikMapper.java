@@ -6,11 +6,14 @@ package com.example.narucivanje.mapper;
 
 import com.example.narucivanje.dto.KorisnikDto;
 import com.example.narucivanje.model.Korisnik;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author necao
  */
+
+@Component
 public class KorisnikMapper implements BaseMapper<Korisnik, KorisnikDto>{
     @Override
     public KorisnikDto toDto(Korisnik entity) {
