@@ -36,10 +36,12 @@ public class RestoranService {
         
         return mapper.toDto(entity);
     }
+    @Transactional(readOnly = true)
     public List<RestoranDto> searchByName(String naziv)
     {
         return repo.findByNazivContainingIgnoreCase(naziv).stream().map(mapper::toDto).toList();
     }
+    @Transactional
     public RestoranDto addRestoran(RestoranDto dto)
     {
         if(repo.existsByNaziv(dto.getNaziv()))
@@ -49,11 +51,13 @@ public class RestoranService {
         Restoran sacuvanRestoran = repo.save(mapper.toEntity(dto));
         return mapper.toDto(sacuvanRestoran);
     }
+    @Transactional
     public void removeRestoran(Long id)
     {
         Restoran entity = repo.findById(id).orElseThrow(() -> new EntityNotFoundException("restoran sa id: " + id + " ne postoji!"));
         repo.delete(entity);
     }
+    @Transactional
     public RestoranDto izmeniRestoran(Long id, RestoranDto dto)
     {
         Restoran stari = repo.findById(id).orElseThrow(() -> new EntityNotFoundException("restoran sa id: " + id + " ne postoji!"));
@@ -62,7 +66,7 @@ public class RestoranService {
             throw new IllegalArgumentException("objekat sa nazivom " + dto.getNaziv() + " vec postoji");
         }
         stari.setAdresa(dto.getAdresa());
-        stari.setId(dto.getId());
+        
         stari.setNaziv(dto.getNaziv());
         stari.setRadnoVreme(dto.getRadnoVreme());
         stari.setTelefon(dto.getTelefon());

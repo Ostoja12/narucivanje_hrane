@@ -18,12 +18,18 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author necao
  */
 @Entity
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Porudzbina extends DomainEntity{
     @Column(nullable = false)
     private LocalDateTime datumVreme;
@@ -40,9 +46,6 @@ public class Porudzbina extends DomainEntity{
     private Restoran restoran;
     @OneToMany(mappedBy = "porudzbina", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StavkaPorudzbine> stavke = new ArrayList<>();
-    public Porudzbina() {
-    }
-
     public Porudzbina(LocalDateTime datumVreme, StatusPorudzbine status, String adresaDostave, BigDecimal ukupnaCena, Korisnik korisnik, Restoran restoran) {
        
         this.datumVreme = datumVreme;
@@ -51,55 +54,5 @@ public class Porudzbina extends DomainEntity{
         this.ukupnaCena = ukupnaCena;
         this.korisnik = korisnik;
         this.restoran = restoran;
-    }
-
-    public LocalDateTime getDatumVreme() {
-        return datumVreme;
-    }
-
-    public void setDatumVreme(LocalDateTime datumVreme) {
-        this.datumVreme = datumVreme;
-    }
-
-    public StatusPorudzbine getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusPorudzbine status) {
-        this.status = status;
-    }
-
-    public String getAdresaDostave() {
-        return adresaDostave;
-    }
-
-    public void setAdresaDostave(String adresaDostave) {
-        this.adresaDostave = adresaDostave;
-    }
-
-    public BigDecimal getUkupnaCena() {
-        return ukupnaCena;
-    }
-
-    public void setUkupnaCena(BigDecimal ukupnaCena) {
-        this.ukupnaCena = ukupnaCena;
-    }
-
-    public Korisnik getKorisnik() {
-        return korisnik;
-    }
-
-    public void setKorisnik(Korisnik korisnik) {
-        this.korisnik = korisnik;
-    }
-
-    public Restoran getRestoran() {
-        return restoran;
-    }
-
-    public void setRestoran(Restoran restoran) {
-        this.restoran = restoran;
-    }
-    
-    
+    } 
 }
