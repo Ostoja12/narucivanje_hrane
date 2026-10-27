@@ -44,6 +44,11 @@ public class Porudzbina extends DomainEntity{
     private Korisnik korisnik;
     @ManyToOne(optional = false)
     private Restoran restoran;
+    //ovde imas jedan problem a to je sto je automatski fetch style = lazy a to znaci da
+    //kada povucem porudzbine nece povuci i stavke pa ako zelim da vidim stavke necu moci ali 
+    //to ne treba resiti tako sto pisemo fetchType = eager jer to je losa praksa jer onda pri svakom pozivu gde nam trebaju i samo
+    //korisnici vucemo adrese e pa zato tamo u repo kod findall povise pieses @Query("Select k from korisnik k JOIN FETCH k.adrese
+    
     @OneToMany(mappedBy = "porudzbina", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StavkaPorudzbine> stavke = new ArrayList<>();
     public Porudzbina(LocalDateTime datumVreme, StatusPorudzbine status, String adresaDostave, BigDecimal ukupnaCena, Korisnik korisnik, Restoran restoran) {

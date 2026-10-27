@@ -49,7 +49,7 @@ public class JeloMapper implements BaseMapper<Jelo, JeloDto>{
         jelo.setDostupnost(dto.isDostupnost());
         jelo.setCena(dto.getCena());
         jelo.setOpis(dto.getOpis());
-        
+        jelo.setNaziv(dto.getNaziv());
         return jelo;
         
     }

@@ -41,9 +41,9 @@ public class JeloService {
     @Transactional
     public JeloDto kreirajJelo(JeloDto dto)
     {
-        Restoran restoran = repoRestoran.findById(dto.getId()).orElseThrow(() -> new EntityNotFoundException("Restoran sa Id: " + dto.getRestoranId() + " nije pronadjen!"));
-        Kategorija kategorija = repoKategorija.findById(dto.getId()).orElseThrow(() -> new EntityNotFoundException("Kategorija sa id + " + dto.getKategorijaId() + "nije pronadjena"));
-        if(repo.existsByNazivAndRestoranId(dto.getNaziv(), dto.getId()))
+        Restoran restoran = repoRestoran.findById(dto.getRestoranId()).orElseThrow(() -> new EntityNotFoundException("Restoran sa Id: " + dto.getRestoranId() + " nije pronadjen!"));
+        Kategorija kategorija = repoKategorija.findById(dto.getKategorijaId()).orElseThrow(() -> new EntityNotFoundException("Kategorija sa id + " + dto.getKategorijaId() + "nije pronadjena"));
+        if(repo.existsByNazivAndRestoranId(dto.getNaziv(), dto.getRestoranId()))
         {
             throw new IllegalArgumentException("Jelo sa nazivom '" + dto.getNaziv()+ "' vec postoji u ovom restoranu");
         }

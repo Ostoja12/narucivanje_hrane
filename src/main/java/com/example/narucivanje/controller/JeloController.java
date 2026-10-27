@@ -35,7 +35,7 @@ public class JeloController {
     
     private final JeloService jeloService;
     
-    //GET /api/jela vracamo sva jela
+    
     @GetMapping("/pretrazi")
     public ResponseEntity<Page<JeloDto>> pretraziJela(@RequestParam(required = false)Long restoranId, 
             @RequestParam(required = false)Long kategorijaId,
